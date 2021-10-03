@@ -3,8 +3,9 @@ import { createStore } from 'vuex'
 
 const state = {
 	movies: [
-	  {
-		movie: '',
+	  {	
+		id: '',
+		name: '',
 		gender: '',
 		description: '',
 		datetime: ''
@@ -12,19 +13,30 @@ const state = {
 	],
 }
 
-const actions = {
+const getters = {
+	movies: state => {
+		return state.movies.filter(movie => movie);
+	}
+}
+
+const actions = {	
 	newMovie({commit}, movies) {
-		commit('setMovie', movies)
+		setTimeout(() =>{
+			movies.id = Date.now()
+			movies.datetime = new Date().toLocaleDateString('pt-BR', {
+				day: 'numeric',
+				month: 'short',
+				year: 'numeric'
+			})
+			commit('setMovie', movies)
+		}, 1000)
 	}
 }
 
 const mutations = {
 	setMovie(state, payload){
-		state.movies.push(payload);
-	},
-	getMovies(state) {
-		return state.movies;
-	}
+		state.movies = [...state.movies, payload];			
+	}	
 }
 
-export default createStore({ state, actions, mutations })
+export default createStore({ state, getters, actions, mutations })

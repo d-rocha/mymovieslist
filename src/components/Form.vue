@@ -189,12 +189,7 @@
                 errors: [],                
                 loading: false,
             }
-        },
-        computed: {
-            allMovies() {
-                return this.$store.getters.movies;
-            }
-        },
+        },        
          methods: {
             addMovie() {
                 let hasError = this.validateForm();                
@@ -217,7 +212,7 @@
                 }, 3000);
             },
             ifMovieExist() {
-                let movies = this.$store.state.movies;                
+                let movies = this.$store.getters.movies;
                 
                 for(let i = 0; i < movies.length; i++) {
                     if (movies[i].name == this.movie.name && movies[i].gender == this.movie.gender)

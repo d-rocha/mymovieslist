@@ -9,13 +9,27 @@
             <span>NAO EXISTEM FILMES A EXIBIR</span>
         </div>
 
-        <div class="control filter" v-if="movies.length > 1 ">
-            <Select title="Filtrar por Gênero" v-model="currentOption"/>
+
+        <div class="control filter" v-if="movies.length > 1">
+            <p>Filtrar por gênero</p>
+
+            <select 
+                name="filter" 
+                class="filter" id="filter" @change="handleChange($event)">
+                <option value="">Escolha uma opção</option>
+                <option 
+                    v-for="item in genderOption" 
+                    :key="item" 
+                    :value="item"
+                >
+                    {{item}}
+                </option>
+            </select>            
         </div>
 
-        <div v-bind:class="movies.length > 4 ? 'movies-slide' : 'movies'" v-if="movies.length > 1 ">
-              <div class="movies-card" v-for="movie in movies" :key="movie.id">
-                <div class="card" v-if="movie.id != ''">
+        <div v-bind:class="movies.length > 4 ? 'movies-slide' : 'movies'" v-if="movies.length > 1">
+            <div class="movies-card" v-for="movie in movies" :key="movie.id">                
+                <div class="card" v-if="movie.id != '' && selected == ''">
                     <div class="card_image">
                         <img src="../assets/card_image.webp" alt="Card Movie" />
                     </div>
@@ -52,7 +66,48 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                
+                <div class="card" v-if="movie.id != '' && selected == movie.gender">
+                    <div class="card_image">
+                        <img src="../assets/card_image.webp" alt="Card Movie" />
+                    </div>
+
+                    <div class="gender-movie">
+                        <span>
+                            {{movie.gender}}
+                        </span>
+                    </div>
+                    <div class="title-movie">
+                        <p>
+                            {{movie.name}}
+                        </p>
+                    </div>
+                
+                    <div class="description-movie">
+                        <p>
+                            {{movie.description}}
+                        </p>                        
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        <div class="one-third date-movie">
+                            <div class="created-at">
+                                <span>
+                                    Criado em:
+                                </span>
+                            </div>
+                            <div class="stat-value date-value">
+                                <span>
+                                    {{movie.datetime}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            
+            
+
         </div>
 
         <div class="action">
@@ -107,6 +162,23 @@
     .container .action a  button:hover {
         color: #2c3e50;
         background-color: #fff;        
+    }
+    select {
+        position: relative;
+        display: block;
+        width: 100%;
+        cursor: pointer;        
+        color: #2b3e51;
+        padding: 12px;
+        border: 1px solid #cfd9db;
+        background-color: #ffffff;
+        border-radius: 0.25em;        
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
+    }
+    select:focus {
+        outline: none;
+        border-color: #2c3e50;
+        box-shadow: 0 0 5px rgba(44, 151, 222, 0.2);
     }
     .movies {
         display: flex;
@@ -215,23 +287,42 @@
     }
 </style>
 
-<script>
-    import Select from '@/components/Select.vue';
+<script>    
     import Button from '@/components/Button.vue';
 
     export default {
         name: 'Movies',
-        components: {
-            Select,
+        components: {        
             Button
         },
         props: {
-            titleMovie: String
+            titleMovie: String            
         },        
         computed: {
             movies() {
                 return this.$store.getters.movies;
             }
-        }        
+        },
+        data() {
+            return {
+                genderOption: [                    
+                    'Ação',
+                    'Animação',
+                    'Aventura',
+                    'Comédia',
+                    'Documentário',
+                    'Ficção',
+                    'Heróis',
+                    'Romance'
+                ],
+                selected: ''                
+            }
+        },
+       methods: {
+            handleChange(e) {                
+                this.selected = e.target.value;
+                return this.selected; 
+            }            
+        }
     }
 </script>

@@ -1,6 +1,8 @@
 <template>    
     <p>{{title}}</p>
-    <select name="filter" class="filter" id="filter"  @change="handleChange($event)"  v-model="val">
+    <select 
+        name="filter" 
+        class="filter" id="filter"  @change="handleChange($event)">
         <option value="">Escolha uma opção</option>
         <option 
             v-for="item in genderOption" 
@@ -38,6 +40,9 @@
         name: 'Select',
         props: {
             title: String,
+        },
+        model: {
+            event: 'change'
         },
         data() {
             return {
